@@ -1,0 +1,101 @@
+# =====================
+# Stage 1: build turnup
+# =====================
+FROM ubuntu:24.04 AS build-turnup
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    wget \
+    unzip \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+RUN wget -O src.zip https://github.com/show-matz/turnup/archive/refs/tags/version_0.843.zip \
+ && unzip src.zip \
+ && cd "$(ls -d turnup-* | head -n1)/src" \
+ && make -j"$(nproc)" MAJOR_VER=0 MINOR_VER=843 DRAFT_LV=0 release-build \
+ && mkdir -p /out \
+ && install -m 0755 release/turnup /out/turnup
+
+# =====================
+# Stage 2: build kaavio
+# =====================
+FROM ubuntu:24.04 AS build-kaavio
+
+RUN apt-get update && apt-get install -y \
+    sbcl \
+    wget \
+    unzip \
+    make \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+RUN wget -O src.zip https://github.com/show-matz/kaavio/archive/refs/tags/version_0.032.zip \
+ && unzip src.zip \
+ && cd "$(ls -d kaavio-* | head -n1)/misc" \
+ && make -j"$(nproc)" bare-build \
+ && mkdir -p /out \
+ && install -m 0755 ./kaavio /out/kaavio
+
+# =====================
+# Stage 3: runtime
+# =====================
+FROM ubuntu:24.04
+
+# (A) 依存ツール一式
+RUN apt-get update && apt-get install -y \
+    bash \
+    highlight \
+    gnuplot \
+    openjdk-17-jre \
+    graphviz \
+    wget \
+    nodejs \
+    npm \
+    curl \
+    gnupg \
+    fonts-liberation \
+    fonts-noto-color-emoji \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+# (A.1) Google Chrome stable を公式リポジトリから導入
+RUN curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+ && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
+ && apt-get update \
+ && apt-get install -y google-chrome-stable \
+ && rm -rf /var/lib/apt/lists/*
+
+# (B) turnup が使うリソース
+WORKDIR /opt/turnup
+COPY opt-turnup/default.css opt-turnup/filters.sh opt-turnup/highlight.sh ./
+RUN chmod +x filters.sh highlight.sh
+
+# (C) mermaid-cli 公式の puppeteer-config.json と同等の設定を同梱
+# executablePath を /usr/bin/google-chrome-stable に固定し、--no-sandbox を付与
+RUN printf '{\n  "executablePath": "/usr/bin/google-chrome-stable",\n  "args": ["--no-sandbox"]\n}\n' \
+    > puppeteer-config.json
+
+# (D) mermaid-cli + puppeteer（※ puppeteer は peer dependency）
+RUN npm install -g @mermaid-js/mermaid-cli puppeteer
+
+# (E) Puppeteer に「system chromium を使う」ことを環境変数でも示す（Docker版で典型）
+ENV CHROME_BIN="/usr/bin/google-chrome-stable" \
+    PUPPETEER_SKIP_DOWNLOAD="true"
+
+# (F) PlantUML (jar + wrapper)
+RUN wget -O /usr/local/lib/plantuml.jar \
+      https://github.com/plantuml/plantuml/releases/download/v1.2026.2/plantuml.jar \
+ && printf '#!/bin/sh\nexec java -jar /usr/local/lib/plantuml.jar "$@"\n' \
+      > /usr/local/bin/plantuml \
+ && chmod +x /usr/local/bin/plantuml
+
+# (G) turnup/kaavio 本体
+COPY --from=build-turnup /out/turnup /usr/local/bin/turnup
+COPY --from=build-kaavio /out/kaavio /usr/local/bin/kaavio
+
+ENTRYPOINT ["/usr/local/bin/turnup"]
