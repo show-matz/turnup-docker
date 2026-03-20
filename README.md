@@ -1,4 +1,6 @@
-# はじめに
+# turnup-docker
+
+## ◆はじめに
 
 　これは、turnup をセットアップした docker イメージを作成するための 
 Dockerfile です。以下の外部フィルタをまとめて使えるようにしてあります。
@@ -16,9 +18,10 @@ Mermaid を含まないビルドも用意しています。それ以外は同じ
 * Dockerfile.full
 * Dockerfile.no-mermaid
 
+　　
 
-# セットアップ
-## Docker のインストール（もしまだなら）
+## ◆セットアップ
+### Docker のインストール（もしまだなら）
 
 　以下を実行して docker をインストールしてください。ここでは turnup の 
 docker image を使用することだけを想定しているので、docker.io を選択して
@@ -46,7 +49,7 @@ sudo docker run hello-world
 sudo usermod -aG docker $USER
 ```
 
-## docker イメージのビルド
+### docker イメージのビルド
 
 　docker build します。Mermaid が不要なら `Dockerfile.full` の代わりに 
 `Dockerfile.no-mermaid` を使用した方がサイズが小さいです。
@@ -55,7 +58,7 @@ sudo usermod -aG docker $USER
 docker build -q -f Dockerfile.full -t turnup .
 ```
 
-## ショートカットスクリプトの作成
+### ショートカットスクリプトの作成
 
 　docker コマンドで実行するのは面倒なので、 `/usr/local/bin` 配下に
 スクリプトを作成してショートカットしましょう。以下を実行してください。
@@ -67,7 +70,9 @@ printf \
     && sudo chmod +x /usr/local/bin/turnup
 ```
 
-# ためしに使ってみる
+　　
+
+## ◆ためしに使ってみる
 
 　このディレクトリにある `test.md` を HTML 文書に変換してみましょう。
 以下の要領で実行してください。
