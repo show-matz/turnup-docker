@@ -17,6 +17,7 @@ RUN wget -O src.zip https://github.com/show-matz/turnup/archive/refs/tags/versio
  && cd "$(ls -d turnup-* | head -n1)/src" \
  && make -j"$(nproc)" MAJOR_VER=0 MINOR_VER=843 DRAFT_LV=0 release-build \
  && mkdir -p /out \
+ && cp ../manual/manual.html /out/turnup.html \
  && install -m 0755 release/turnup /out/turnup
 
 # =====================
@@ -39,6 +40,7 @@ RUN wget -O src.zip https://github.com/show-matz/kaavio/archive/refs/tags/versio
  && cd "$(ls -d kaavio-* | head -n1)/misc" \
  && make -j"$(nproc)" bare-build \
  && mkdir -p /out \
+ && cp ../manual/manual.html /out/kaavio.html \
  && install -m 0755 ./kaavio /out/kaavio
 
 # =====================
@@ -95,7 +97,9 @@ RUN wget -O /usr/local/lib/plantuml.jar \
  && chmod +x /usr/local/bin/plantuml
 
 # (G) turnup/kaavio 本体
-COPY --from=build-turnup /out/turnup /usr/local/bin/turnup
-COPY --from=build-kaavio /out/kaavio /usr/local/bin/kaavio
+COPY --from=build-turnup /out/turnup      /usr/local/bin/turnup
+COPY --from=build-turnup /out/turnup.html /opt/turnup/turnup.html
+COPY --from=build-kaavio /out/kaavio      /usr/local/bin/kaavio
+COPY --from=build-kaavio /out/kaavio.html /opt/turnup/kaavio.html
 
 ENTRYPOINT ["/usr/local/bin/turnup"]
