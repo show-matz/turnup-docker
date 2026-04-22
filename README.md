@@ -65,7 +65,7 @@ docker build -q -f Dockerfile.full -t turnup .
 
 ```sh
 printf \
-  '#!/bin/sh\ndocker run --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/work -w /work turnup "$@"\n' \
+  '#!/bin/sh\ndocker run -e HOME=/tmp --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/work -w /work turnup "$@"\n' \
      | sudo tee /usr/local/bin/turnup \
     && sudo chmod +x /usr/local/bin/turnup
 ```
