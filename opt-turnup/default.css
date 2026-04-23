@@ -83,10 +83,10 @@ code { color: #000;
 
 /* normal pre block */
 pre {
-    background:     #eee;
+    background:     #e0eaee;
     color:          #000;
-    font-size:      12px;
-    border:         1px solid #ccc;
+    font-size:      14px;
+    border:         1px solid #aaa;
     border-radius:  8px;
     margin-left:    2em;
     margin-right:   2em;
@@ -128,19 +128,19 @@ td { vertical-align: top; padding: 3px; border: 1px solid black;}
 
 /* for filters */
 pre.diff {
-    background:     #334;
-    color:          #fff;
+    background:     #e0eaee;
+    color:          #000000;
     font-size:      12px;
-    border:         1px solid #000;
+    border:         1px solid #aaa;
     border-radius:  8px;
     margin-left:    2em;
     margin-right:   2em;
     padding:       .5em;
 }
-span.diff_head { color: #FF88FF; background: #550055; font-weight: bold; }
-span.diff_line { color: #CCCCFF; background: #000077; font-weight: bold; }
-span.diff_add  { color: #DCFBDC; background: #004400; font-weight: bold; }
-span.diff_del  { color: #FBDCDC; background: #550000; font-weight: bold; }
+span.diff_head { color: #FFAAFF; background: #550055; font-weight: bold; }
+span.diff_line { color: #DDDDFF; background: #000077; font-weight: bold; }
+span.diff_add  { color: #006600; background: #DCFBDC; font-weight: bold; }
+span.diff_del  { color: #660000; background: #FBDCDC; font-weight: bold; }
 
 pre.code {
     background:     #e0eaee;
