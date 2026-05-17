@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /build
 
-RUN wget -O src.zip https://github.com/show-matz/turnup/archive/refs/tags/version_0.843.zip \
+RUN wget -O src.zip https://github.com/show-matz/turnup/archive/refs/tags/version_0.844.zip \
  && unzip src.zip \
  && cd "$(ls -d turnup-* | head -n1)/src" \
  && make -j"$(nproc)" MAJOR_VER=0 MINOR_VER=843 DRAFT_LV=0 release-build \
