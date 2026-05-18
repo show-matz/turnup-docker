@@ -82,8 +82,9 @@ RUN chmod +x filters.sh highlight.sh
 RUN printf '{\n  "executablePath": "/usr/bin/google-chrome-stable",\n  "args": ["--no-sandbox"]\n}\n' \
     > puppeteer-config.json
 
-# (D) mermaid-cli + puppeteer（※ puppeteer は peer dependency）
-RUN npm install -g @mermaid-js/mermaid-cli puppeteer
+# (D) mermaid-cli
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+RUN npm install -g @mermaid-js/mermaid-cli
 
 # (E) Puppeteer に「system chromium を使う」ことを環境変数でも示す（Docker版で典型）
 ENV CHROME_BIN="/usr/bin/google-chrome-stable" \
