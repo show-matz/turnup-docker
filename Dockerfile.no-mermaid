@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /build
 
-RUN wget -O src.zip https://github.com/show-matz/kaavio/archive/refs/tags/version_0.033.zip \
+RUN wget -O src.zip https://github.com/show-matz/kaavio/archive/refs/tags/version_0.034.zip \
  && unzip src.zip \
  && cd "$(ls -d kaavio-* | head -n1)/misc" \
  && make -j"$(nproc)" bare-build \
