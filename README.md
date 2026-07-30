@@ -76,7 +76,7 @@ printf \
 
 ```
 printf \
-  '#!/bin/sh\ndocker run -e HOME=/tmp --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/work -w /work --entrypoint /usr/local/bin/standalone-filters.sh turnup "$@"\n' \
+  '#!/bin/sh\ndocker run -e HOME=/tmp --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/work -w /work --entrypoint /opt/turnup/standalone-filters.sh turnup "$@"\n' \
      | sudo tee /usr/local/bin/turnup-filter \
     && sudo chmod +x /usr/local/bin/turnup-filter
 ```
