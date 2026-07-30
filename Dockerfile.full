@@ -74,8 +74,8 @@ RUN curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key a
 
 # (B) turnup が使うリソース
 WORKDIR /opt/turnup
-COPY opt-turnup/default.css opt-turnup/filters.sh opt-turnup/highlight.sh ./
-RUN chmod +x filters.sh highlight.sh
+COPY opt-turnup/default.css opt-turnup/filters.sh opt-turnup/highlight.sh opt-turnup/standalone-filters.sh ./
+RUN chmod +x filters.sh highlight.sh standalone-filters.sh
 
 # (C) mermaid-cli 公式の puppeteer-config.json と同等の設定を同梱
 # executablePath を /usr/bin/google-chrome-stable に固定し、--no-sandbox を付与

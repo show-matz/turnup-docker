@@ -61,8 +61,8 @@ RUN apt-get update && apt-get install -y \
 
 # (B) turnup が使うリソース
 WORKDIR /opt/turnup
-COPY opt-turnup/default.css opt-turnup/filters.sh opt-turnup/highlight.sh ./
-RUN chmod +x filters.sh highlight.sh
+COPY opt-turnup/default.css opt-turnup/filters.sh opt-turnup/highlight.sh opt-turnup/standalone-filters.sh ./
+RUN chmod +x filters.sh highlight.sh standalone-filters.sh
 
 # (F) PlantUML (jar + wrapper)
 RUN wget -O /usr/local/lib/plantuml.jar \

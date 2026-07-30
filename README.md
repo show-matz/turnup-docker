@@ -70,6 +70,25 @@ printf \
     && sudo chmod +x /usr/local/bin/turnup
 ```
 
+
+　また、作図系の同梱フィルタを単独で使用できるようにするスクリプトは以下
+でショートカットを作成できます。
+
+```
+printf \
+  '#!/bin/sh\ndocker run -e HOME=/tmp --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/work -w /work --entrypoint /usr/local/bin/standalone-filters.sh turnup "$@"\n' \
+     | sudo tee /usr/local/bin/turnup-filter \
+    && sudo chmod +x /usr/local/bin/turnup-filter
+```
+
+　これで、以下のフィルタが `turnup-filter plantuml DATAFILE > SVGFILE` の
+要領で使用できるようになります。
+
+* gnuplot
+* PlantUML
+* kaavio
+* Mermaid (full 版のみ）
+
 　　
 
 ## ◆ためしに使ってみる
